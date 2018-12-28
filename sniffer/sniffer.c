@@ -8,6 +8,8 @@
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <arpa/inet.h>
+#include <signal.h>
+#include <string.h>
 #include <linux/if_ether.h>
 #include <linux/if_packet.h>
 #include <net/if.h>
@@ -18,7 +20,7 @@
 int main(int argc, char *argv[]) {
 	struct arphdr arp;
 	int sock;
-	unsigned char buff[256];
+	unsigned char buff[MAXBUF];
 	int pom;
 	struct ethhdr *eth = (void *)buff;
 	struct ifreq ifr;
@@ -40,8 +42,8 @@ int main(int argc, char *argv[]) {
 			exit(1);
 		}	
 		printf("Sniffing have been started\n");
-		while ((pom = recv(sock, buff, 0)) == -1) {
-			
+		while ((pom = recv(sock, buff, MAXBUF, 0)) != -1) {
+			printf("%d", pom);
 		}
 
 		
