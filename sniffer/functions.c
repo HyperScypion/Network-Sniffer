@@ -1,13 +1,19 @@
 #include <net/if_arp.h>
 #include <arpa/inet.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <sys/socket.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <netinet/ip.h>
+#include <net/if.h>
+#include <netinet/ip6.h>
+#include <netinet/ip_icmp.h>
 #include <linux/if_packet.h>
 #include <net/ethernet.h>
 #include <linux/if_ether.h>
-#include <sys/socket.h>
+#include "functions.h"
 
 void print_hex(unsigned char *adr, unsigned char size) {
 	unsigned char i = 0;
@@ -37,9 +43,9 @@ void print_arp(struct arphdr *arp) {
 	printf("\tLength of protocol address: %x\n", arp->ar_pln);
 	printf("\tARP opcode: %x\n", ntohs(arp->ar_op));
 	printf("\tSender hardware address: ");
-/*	unsigned char *adr = (void *)arp+sizeof(*arp);
+	unsigned char *adr = (void *)arp+sizeof(*arp);
 	print_hex(adr, arp->ar_hln);
-*/
+
 }
 
 void print_dhcp(struct sockaddr_ll *sockll) {
@@ -58,3 +64,20 @@ void print_eth(struct ethhdr *eth) {
 	print_hex((void *)&eth->h_source, ETH_ALEN);
 	printf("Packet type ID: 0x%04x\n", ntohs(eth->h_proto));
 }
+
+void print_ip4(struct iphdr *ip) {
+	printf("\t~~~IP~~~\n");
+	printf("\tVersion: %u\n", ip->version);
+	printf("\tToS: %u\n", ip->tos);
+	printf("\tTotal length: %u\n", ip->tot_len);
+	printf("\tID: %u\n", ip->id);
+	printf("\tFragment offset: %u\n", ip->frag_off);
+	printf("\tTTL: %u\n", ip->ttl);
+	printf("\tProtocol: %u\n", ip->protocol);
+	printf("\tCheck: %u\n", ip->check);
+	char source[16];
+	snprintf(source, 16, "%dI4", ip->saddr);
+}
+/*
+void print_ip6(struct )
+*/

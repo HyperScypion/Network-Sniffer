@@ -18,7 +18,7 @@
 /*unsigned char buff[MAXBUF];*/
 
 int main(int argc, char *argv[]) {
-	struct arphdr arp;
+	struct arphdr *arp;
 	int sock;
 	unsigned char buff[MAXBUF];
 	int pom;
@@ -44,6 +44,25 @@ int main(int argc, char *argv[]) {
 		printf("Sniffing have been started\n");
 		while ((pom = recv(sock, buff, MAXBUF, 0)) != -1) {
 			print_eth(eth);
+
+			switch(ntohs(eth->h_proto)) {
+
+			    case ETH_P_ARP: {
+			            print_arp((void *)(eth+1));
+			            break;
+			        }
+
+			    case ETH_P_IP: {
+			            print_ip4((void *)(eth+1));
+			            break;
+			    }
+			    case ETH_P_IPV6: {
+
+			    }
+
+			}
+
+			
 		}
 
 		
