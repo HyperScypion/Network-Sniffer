@@ -29,7 +29,7 @@ void print_dec(unsigned char *adr, unsigned char size) {
 	unsigned char i = 0;
 	printf("%04x", adr[0]);
 	while (++i < size) {
-		printf("%u", adr[i]);
+		printf(":%04x", adr[i]);
 	}
 	printf("\n");
 }
@@ -75,9 +75,18 @@ void print_ip4(struct iphdr *ip) {
 	printf("\tTTL: %u\n", ip->ttl);
 	printf("\tProtocol: %u\n", ip->protocol);
 	printf("\tCheck: %u\n", ip->check);
-	char source[16];
-	snprintf(source, 16, "%dI4", ip->saddr);
+	printf("\tSource address: ");
+	print_dec((void *)ip+12, 4);
+	printf("\tDestination address: ");
+	print_dec((void *)ip+16, 4);
+	printf("\n");
 }
-/*
-void print_ip6(struct )
-*/
+
+void print_ip6(struct ip6_hdr *ip6) {
+    printf("\t~~~IPV6~~~\n");
+    printf("\tPayload length: %u\n", ntohs(ip6->ip6_plen));
+    printf("\tNext header: %u\n", ntohs(ip6->ip6_nxt));
+    printf("\tHop limit: %u\n", ntohs(ip6->ip6_hlim));
+
+}
+
