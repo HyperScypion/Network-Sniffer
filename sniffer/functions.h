@@ -7,4 +7,5 @@ void print_arp(struct arphdr);
 void print_dec(unsigned char *adr, unsigned char size);
 */
 void print_dhcp(struct sockaddr_ll *sockll);
+void print_eth(struct ethhdr *eth);
 #endif
