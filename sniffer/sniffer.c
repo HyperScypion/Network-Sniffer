@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 		}	
 		printf("Sniffing have been started\n");
 		while ((pom = recv(sock, buff, MAXBUF, 0)) != -1) {
-			printf("%d", pom);
+			print_eth(eth);
 		}
 
 		

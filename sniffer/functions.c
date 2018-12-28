@@ -11,8 +11,9 @@
 
 void print_hex(unsigned char *adr, unsigned char size) {
 	unsigned char i = 0;
-	while( i <= size) {
-		printf("%02x", adr[i]);
+	printf("%02x", adr[0]);
+	while( ++i < size) {
+		printf(":%02x", adr[i]);
 		i += 1;
 	}
 	printf("\n");
@@ -20,7 +21,8 @@ void print_hex(unsigned char *adr, unsigned char size) {
 
 void print_dec(unsigned char *adr, unsigned char size) {
 	unsigned char i = 0;
-	while (i <= size) {
+	printf("%04x", adr[0]);
+	while (++i < size) {
 		printf("%u", adr[i]);
 	}
 	printf("\n");
@@ -52,9 +54,7 @@ void print_eth(struct ethhdr *eth) {
 	printf("\n~~~Ethernet~~~\n");
 	printf("Destination ethernet address: ");
 	print_hex((void *)&eth->h_dest, ETH_ALEN);
-	printf("\n");
 	printf("Source ehernet address: ");
 	print_hex((void *)&eth->h_source, ETH_ALEN);
-	printf("\n");
 	printf("Packet type ID: 0x%04x\n", ntohs(eth->h_proto));
 }
