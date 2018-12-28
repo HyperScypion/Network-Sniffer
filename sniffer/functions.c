@@ -51,13 +51,6 @@ void print_arp(struct arphdr *arp) {
 
 }
 
-void print_dhcp(struct sockaddr_ll *sockll) {
-	printf("\t\tPhysical-layer protocol: %u\n", sockll->sll_family);
-	printf("\t\tInterface number: %u\n", sockll->sll_ifindex);
-	printf("\t\tRP hardware type: %d\n", sockll->sll_hatype);
-	printf("\t\tPacket type %x\n", sockll->sll_pkttype);
-	printf("\t\tLength of address %d", sockll->sll_halen);
-}
 
 void print_eth(struct ethhdr *eth) {
 	printf("\n~~~Ethernet~~~\n");
@@ -107,7 +100,10 @@ void print_udp(struct udphdr *udp) {
 	printf("\t\tSource: %u\n", ntohs(udp->source));
 	printf("\t\tDestination: %u\n", ntohs(udp->dest));
 	printf("\t\tLength: %u\n", ntohs(udp->len));
-	printf("\t\tCheck: %u", udp->source);
+	printf("\t\tCheck: %u", udp->check);
+	if (ntohs(udp->source) == 67 && ntohs(udp->dest) == 67) {
+		print_dhcp((void *)(udp+1));
+	}
 }
 
 void print_tcp(struct tcphdr *tcp) {
@@ -125,5 +121,25 @@ void print_icmp(struct icmphdr *icmp) {
 	printf("\t\t~~~ICMP~~~\n");
 	printf("\t\tMessage type: %u\n", icmp->type);
 	printf("\t\tCode: %u\n", icmp->code);
-	printf("\t\tChecksum: %u\n", ntohs(icmp->checksum));
+	printf("\t\tChecksum: 0x%04x\n", ntohs(icmp->checksum));
+}
+
+void print_dhcp(struct dhcphdr *dhcp) {
+	printf("\n~~~DHCP~~~\n");
+	printf("\t\t\tOperation: %u\n", dhcp->op);
+	printf("\t\t\tType of hardware address:  %u\n", dhcp->htype);
+	printf("\t\t\tLength of hardware address:  %u\n", dhcp->hlen);
+	printf("\t\t\tHops:  %u\n", dhcp->hops);
+	printf("\t\t\tXID:  0x%08X\n", ntohl(dhcp->xid));
+	printf("\t\t\tSECS:  %u\n", ntohs(dhcp->secs));
+	printf("\t\t\tClient IP: ");
+	print_dec(dhcp->cia, 4);
+	printf("\n");
+	printf("\t\t\tYour IP: ");
+	print_dec(dhcp->yia, 4);
+	printf("\n");
+	printf("\t\t\tGateway IP: ");
+	print_dec(dhcp->gia, 4);
+	printf("\n");
+
 }
