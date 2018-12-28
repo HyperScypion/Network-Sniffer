@@ -6,6 +6,7 @@
 #include <net/if.h>
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
+#include <netinet/ip_icmp.h>
 #define MAXBUF 65536
 void print_arp(struct arphdr *arp);
 void print_hex(unsigned char *adr, unsigned char size);
@@ -16,4 +17,5 @@ void print_ip4(struct iphdr *ip);
 void print_ip6(struct ip6_hdr *ip6);
 void print_tcp(struct tcphdr *tcp);
 void print_udp(struct udphdr *udp);
+void print_icmp(struct icmphdr *icmp);
 #endif

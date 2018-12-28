@@ -15,6 +15,7 @@
 #include <linux/if_ether.h>
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
+#include <netinet/ip_icmp.h>
 #include "functions.h"
 
 void print_hex(unsigned char *adr, unsigned char size) {
@@ -88,12 +89,14 @@ void print_ip4(struct iphdr *ip) {
 		case IPPROTO_UDP:
 			print_udp((void *)ip+ip->ihl*4);
 			break;
+		case IPPROTO_ICMP:
+			print_icmp((void *)ip+ip->ihl*4);
 	}
 }
 
 void print_ip6(struct ip6_hdr *ip6) {
     printf("\t~~~IPV6~~~\n");
-    printf("\tPayload length: %u\n", ntohs(ip6->ip6_plen));
+    printf("\tPayload length: %u\n", ntohl(ip6->ip6_plen));
     printf("\tNext header: %u\n", ntohs(ip6->ip6_nxt));
     printf("\tHop limit: %u", ntohs(ip6->ip6_hlim));
 
@@ -116,6 +119,11 @@ void print_tcp(struct tcphdr *tcp) {
 	printf("\t\tWindow: %u\n", ntohs(tcp->window));
 	printf("\t\tCheck: %u\n", tcp->check);
 	printf("\t\tUrgent pointer: %u\n", ntohs(tcp->urg_ptr));
+}
 
-
+void print_icmp(struct icmphdr *icmp) {
+	printf("\t\t~~~ICMP~~~\n");
+	printf("\t\tMessage type: %u\n", icmp->type);
+	printf("\t\tCode: %u\n", icmp->code);
+	printf("\t\tChecksum: %u\n", ntohs(icmp->checksum));
 }
