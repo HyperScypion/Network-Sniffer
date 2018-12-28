@@ -57,15 +57,12 @@ int main(int argc, char *argv[]) {
 			            break;
 			    }
 			    case ETH_P_IPV6: {
+						print_ip6((void *)(eth+1));
 
 			    }
-
 			}
-
 			
 		}
-
-		
 	}
 	else if (argc > 2) {
 		perror("Too much arguments\n");
