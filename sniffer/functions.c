@@ -28,25 +28,33 @@ void print_dec(unsigned char *adr, unsigned char size) {
 
 
 void print_arp(struct arphdr *arp) {
-	printf("\t~~~ARP~~~");
-	printf("Format of hardware address: %04x\n", ntohs(arp->ar_hrd));
-	printf("Format of protocol adress: %04x\n", ntohs(arp->ar_pro));
-	printf("Length of hardware address: %x\n", arp->ar_hln);
-	printf("Length of protocol address: %x\n", arp->ar_pln);
-	printf("ARP opcode: %x\n", ntohs(arp->ar_op));
-	printf("Sender hardware address: ");
+	printf("\n~~~ARP~~~\n");
+	printf("\tFormat of hardware address: %04x\n", ntohs(arp->ar_hrd));
+	printf("\tFormat of protocol adress: %04x\n", ntohs(arp->ar_pro));
+	printf("\tLength of hardware address: %x\n", arp->ar_hln);
+	printf("\tLength of protocol address: %x\n", arp->ar_pln);
+	printf("\tARP opcode: %x\n", ntohs(arp->ar_op));
+	printf("\tSender hardware address: ");
 /*	unsigned char *adr = (void *)arp+sizeof(*arp);
 	print_hex(adr, arp->ar_hln);
 */
 }
 
 void print_dhcp(struct sockaddr_ll *sockll) {
-	printf("Physical-layer protocol: %u\n", sockll->sll_family);
-	printf("Interface number: %u\n", sockll->sll_ifindex);
-	printf("RP hardware type: %d\n", sockll->sll_hatype);
-	printf("Packet type %x\n", sockll->sll_pkttype);
-	printf("Length of address %d\n", sockll->sll_halen);	
+	printf("\t\tPhysical-layer protocol: %u\n", sockll->sll_family);
+	printf("\t\tInterface number: %u\n", sockll->sll_ifindex);
+	printf("\t\tRP hardware type: %d\n", sockll->sll_hatype);
+	printf("\t\tPacket type %x\n", sockll->sll_pkttype);
+	printf("\t\tLength of address %d\n", sockll->sll_halen);	
 }
 
 void print_eth(struct ethhdr *eth) {
+	printf("\n~~~Ethernet~~~\n");
+	printf("Destination ethernet address: ");
+	print_hex((void *)&eth->h_dest, ETH_ALEN);
+	printf("\n");
+	printf("Source ehernet address: ");
+	print_hex((void *)&eth->h_source, ETH_ALEN);
+	printf("\n");
+	printf("Packet type ID: 0x%04x\n", ntohs(eth->h_proto));
 }
